@@ -53,7 +53,7 @@ namespace Project_FinchControl
             bool quitApplication = false;
             string menuChoice;
 
-            Finch finchRobot = new Finch();
+            Finch doofus = new Finch();
 
             do
             {
@@ -78,11 +78,11 @@ namespace Project_FinchControl
                 switch (menuChoice)
                 {
                     case "a":
-                        connectFinchRobot(finchRobot);
+                        connectdoofus(doofus);
                         break;
 
                     case "b":
-                        TalentShowmenuScreen(finchRobot);
+                        TalentShowmenuScreen(doofus);
                         break;
 
                     case "c":
@@ -98,11 +98,11 @@ namespace Project_FinchControl
                         break;
 
                     case "f":
-                        DisplayDisconnectFinchRobot(finchRobot);
+                        DisplayDisconnectdoofus(doofus);
                         break;
 
                     case "q":
-                        DisplayDisconnectFinchRobot(finchRobot);
+                        DisplayDisconnectdoofus(doofus);
                         quitApplication = true;
                         break;
 
@@ -123,7 +123,7 @@ namespace Project_FinchControl
         /// *                     Talent Show Menu                          *
         /// *****************************************************************
         ///  
-        static void TalentShowmenuScreen(Finch finchRobot)
+        static void TalentShowmenuScreen(Finch doofus)
         {
             Console.CursorVisible = true;
 
@@ -138,7 +138,7 @@ namespace Project_FinchControl
                 // get user menu choice
                 //
                 Console.WriteLine("\ta) Light and Sound");
-                Console.WriteLine("\tb) ");
+                Console.WriteLine("\tb) Movement Talent");
                 Console.WriteLine("\tc) ");
                 Console.WriteLine("\td) ");
                 Console.WriteLine("\tq) Main Menu");
@@ -151,11 +151,11 @@ namespace Project_FinchControl
                 switch (menuChoice)
                 {
                     case "a":
-                        TalentShowDisplayLightAndSound(finchRobot);
+                        TalentShowDisplayLightAndSound(doofus);
                         break;
 
                     case "b":
-
+                        talentShowMovement(doofus);
                         break;
 
                     case "c":
@@ -180,13 +180,31 @@ namespace Project_FinchControl
             } while (!quitTalentShowMenu);
         }
 
+        //
+        // Talent show movement
+        //
+        static void talentShowMovement(Finch doofus)
+        {
+            DisplayScreenHeader("Movement");
+            Console.WriteLine("\tThe Finch robot will not show its movement talent!");
+            continueScreen();
+
+            for (int i = 0; i < 10; i++)
+            {
+                doofus.setMotors(100, 100);
+                doofus.wait(500);
+            }
+            doofus.setMotors(0, 0);
+            
+        }
+
         ///  
         /// *****************************************************************
         /// *               Talent Show > Light and Sound                   *
         /// *****************************************************************
         ///  
-        /// <param name="finchRobot">finch robot object</param>
-        static void TalentShowDisplayLightAndSound(Finch finchRobot)
+        /// <param name="doofus">finch robot object</param>
+        static void TalentShowDisplayLightAndSound(Finch doofus)
         {
             Console.CursorVisible = false;
 
@@ -197,9 +215,10 @@ namespace Project_FinchControl
 
             for (int lightSoundLevel = 0; lightSoundLevel < 255; lightSoundLevel++)
             {
-                finchRobot.setLED(lightSoundLevel, lightSoundLevel, lightSoundLevel);
-                finchRobot.noteOn(lightSoundLevel * 100);
+                doofus.setLED(lightSoundLevel, lightSoundLevel, lightSoundLevel);
+                doofus.noteOn(lightSoundLevel * 100);
             }
+            
 
             DisplayMenuPrompt("Talent Show Menu");
         }
@@ -213,8 +232,8 @@ namespace Project_FinchControl
         /// *               Disconnect the Finch Robot                      *
         /// *****************************************************************
         ///  
-        /// <param name="finchRobot">finch robot object</param>
-        static void DisplayDisconnectFinchRobot(Finch finchRobot)
+        /// <param name="doofus">finch robot object</param>
+        static void DisplayDisconnectdoofus(Finch doofus)
         {
             Console.CursorVisible = false;
 
@@ -223,7 +242,7 @@ namespace Project_FinchControl
             Console.WriteLine("\tAbout to disconnect from the Finch robot.");
             continueScreen();
 
-            finchRobot.disConnect();
+            doofus.disConnect();
 
             Console.WriteLine("\tThe Finch robot is now disconnect.");
 
@@ -235,9 +254,9 @@ namespace Project_FinchControl
         /// *                  Connect the Finch Robot                      *
         /// *****************************************************************
         ///  
-        /// <param name="finchRobot">finch robot object</param>
+        /// <param name="doofus">finch robot object</param>
         /// <returns>notify if the robot is connected</returns>
-        static bool connectFinchRobot(Finch finchRobot)
+        static bool connectdoofus(Finch doofus)
         {
             Console.CursorVisible = false;
 
@@ -248,7 +267,7 @@ namespace Project_FinchControl
             Console.WriteLine("\tAbout to connect to Finch robot. Please be sure the USB cable is connected to the robot and computer now.");
             continueScreen();
 
-            robotConnected = finchRobot.connect();
+            robotConnected = doofus.connect();
 
             // TODO test connection and provide user feedback - text, lights, sounds
 
@@ -257,8 +276,8 @@ namespace Project_FinchControl
             //
             // reset finch robot
             //
-            finchRobot.setLED(0, 0, 0);
-            finchRobot.noteOff();
+            doofus.setLED(0, 0, 0);
+            doofus.noteOff();
 
             return robotConnected;
         }
