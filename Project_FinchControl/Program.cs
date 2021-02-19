@@ -22,7 +22,6 @@ namespace Project_FinchControl
         ///  
         /// first method run when the app starts up
         ///  
-        /// <param name="args"></param>
         static void Main(string[] args)
         {
             SetTheme();
@@ -32,6 +31,7 @@ namespace Project_FinchControl
             DisplayClosingScreen();
         }
 
+        #region METHODS
         ///  
         /// setup the console theme
         ///  
@@ -139,7 +139,7 @@ namespace Project_FinchControl
                 //
                 Console.WriteLine("\ta) Light and Sound");
                 Console.WriteLine("\tb) Movement Talent");
-                Console.WriteLine("\tc) ");
+                Console.WriteLine("\tc) Play a song");
                 Console.WriteLine("\td) ");
                 Console.WriteLine("\tq) Main Menu");
                 Console.Write("\t\tEnter Choice:");
@@ -159,7 +159,7 @@ namespace Project_FinchControl
                         break;
 
                     case "c":
-
+                        talentShowSong(doofus);
                         break;
 
                     case "d":
@@ -179,6 +179,138 @@ namespace Project_FinchControl
 
             } while (!quitTalentShowMenu);
         }
+
+        #region SONG
+        //
+        //talent show song
+        //
+        static void talentShowSong(Finch doofus)
+        {
+            DisplayScreenHeader("Song");
+            Console.WriteLine();
+            Console.WriteLine($"\t The Finch will now demonstrate a song!");
+            continueScreen();
+            Console.WriteLine();
+            Console.WriteLine("\t The Song Of Storms from Legend of Zelda");
+            doofus.setLED(0, 255, 0);
+            //
+            //song start
+            //m1
+            doofus.noteOn(523);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(250);
+            doofus.noteOn(1150);
+            doofus.wait(1000);
+            //m2
+            doofus.noteOn(523);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(250);
+            doofus.noteOn(1150);
+            doofus.wait(1000);
+            //m3
+            doofus.noteOn(1300);
+            doofus.wait(750);
+            doofus.noteOn(1380);
+            doofus.wait(250);
+            doofus.noteOn(1300);
+            doofus.wait(250);
+            doofus.noteOn(1380);
+            doofus.wait(250);
+            //m4
+            doofus.noteOn(1300);
+            doofus.wait(250);
+            doofus.noteOn(1047);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(1000);
+            doofus.noteOff();
+            doofus.wait(100);
+            //m5
+            doofus.noteOn(880);
+            doofus.wait(500);
+            doofus.noteOn(587);
+            doofus.wait(500);
+            doofus.noteOn(698);
+            doofus.wait(250);
+            doofus.noteOn(784);
+            doofus.wait(250);
+            //m6
+            doofus.noteOn(880);
+            doofus.wait(1500);
+            doofus.noteOff();
+            doofus.wait(100);
+            //m7
+            doofus.noteOn(880);
+            doofus.wait(500);
+            doofus.noteOn(587);
+            doofus.wait(500);
+            doofus.noteOn(698);
+            doofus.wait(250);
+            doofus.noteOn(784);
+            doofus.wait(250);
+            //m8
+            doofus.noteOn(659);
+            doofus.wait(1500);
+            doofus.noteOff();
+            doofus.wait(100);
+            //m9
+            doofus.noteOn(587);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(250);
+            doofus.noteOn(1150);
+            doofus.wait(1000);
+            //m10
+            doofus.noteOn(523);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(250);
+            doofus.noteOn(1150);
+            doofus.wait(1000);
+            //m11
+            doofus.noteOn(1300);
+            doofus.wait(750);
+            doofus.noteOn(1380);
+            doofus.wait(250);
+            doofus.noteOn(1300);
+            doofus.wait(250);
+            doofus.noteOn(1380);
+            doofus.wait(250);
+            //m12
+            doofus.noteOn(1300);
+            doofus.wait(250);
+            doofus.noteOn(1047);
+            doofus.wait(250);
+            doofus.noteOn(880);
+            doofus.wait(1000);
+            doofus.noteOff();
+            doofus.wait(100);
+            //13
+            doofus.noteOn(880);
+            doofus.wait(500);
+            doofus.noteOn(587);
+            doofus.wait(500);
+            doofus.noteOn(698);
+            doofus.wait(250);
+            doofus.noteOn(784);
+            doofus.wait(250);
+            //14
+            doofus.noteOn(880);
+            doofus.wait(1000);
+            doofus.noteOff();
+            doofus.wait(100);
+            doofus.noteOn(880);
+            doofus.wait(500);
+            //m15
+            doofus.noteOn(587);
+            doofus.wait(3000);
+            doofus.noteOff();
+
+        }
+        #endregion
+
 
         //
         // Talent show movement
@@ -203,7 +335,7 @@ namespace Project_FinchControl
         /// *               Talent Show > Light and Sound                   *
         /// *****************************************************************
         ///  
-        /// <param name="doofus">finch robot object</param>
+        /// 
         static void TalentShowDisplayLightAndSound(Finch doofus)
         {
             Console.CursorVisible = false;
@@ -232,7 +364,7 @@ namespace Project_FinchControl
         /// *               Disconnect the Finch Robot                      *
         /// *****************************************************************
         ///  
-        /// <param name="doofus">finch robot object</param>
+        /// 
         static void DisplayDisconnectdoofus(Finch doofus)
         {
             Console.CursorVisible = false;
@@ -254,8 +386,7 @@ namespace Project_FinchControl
         /// *                  Connect the Finch Robot                      *
         /// *****************************************************************
         ///  
-        /// <param name="doofus">finch robot object</param>
-        /// <returns>notify if the robot is connected</returns>
+        ///
         static bool connectdoofus(Finch doofus)
         {
             Console.CursorVisible = false;
@@ -328,6 +459,7 @@ namespace Project_FinchControl
             Console.WriteLine();
             Console.WriteLine("\tPress any key to continue.");
             Console.ReadKey();
+            Console.Clear();
         }
 
         /// 
@@ -351,6 +483,7 @@ namespace Project_FinchControl
             Console.WriteLine();
         }
 
+        #endregion
         #endregion
     }
 }
