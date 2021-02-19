@@ -138,9 +138,9 @@ namespace Project_FinchControl
                 // get user menu choice
                 //
                 Console.WriteLine("\ta) Light and Sound");
-                Console.WriteLine("\tb) Movement Talent");
+                Console.WriteLine("\tb) Movement Talent basic");
                 Console.WriteLine("\tc) Play a song");
-                Console.WriteLine("\td) ");
+                Console.WriteLine("\td) user inputs movement");
                 Console.WriteLine("\tq) Main Menu");
                 Console.Write("\t\tEnter Choice:");
                 menuChoice = Console.ReadLine().ToLower();
