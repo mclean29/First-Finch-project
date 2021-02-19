@@ -307,6 +307,7 @@ namespace Project_FinchControl
             doofus.noteOn(587);
             doofus.wait(3000);
             doofus.noteOff();
+            doofus.setLED(0, 0, 0);
 
         }
         #endregion
@@ -321,15 +322,67 @@ namespace Project_FinchControl
             Console.WriteLine("\tThe Finch robot will not show its movement talent!");
             continueScreen();
 
-            for (int i = 0; i < 10; i++)
-            {
-                doofus.setMotors(100, 100);
-                doofus.wait(500);
-            }
+            leftTurn(doofus);
+            rightTurn(doofus);
+            forwardMove(doofus);
+            backwardMove(doofus);
             doofus.setMotors(0, 0);
+            doofus.setLED(0, 0, 0);
             
         }
+        #region Moves
+        //
+        //left turn
+        //
+        static void leftTurn(Finch doofus)
+        {
+            doofus.setLED(250, 0, 250);
+            doofus.noteOn(880);
+            doofus.setMotors(-100,100);
+            doofus.wait(650);
+            doofus.setMotors(0, 0);
+            doofus.noteOff();
 
+        }
+
+        //
+        //right turn
+        //
+        static void rightTurn(Finch doofus)
+        {
+            doofus.setLED(0,0,255);
+            doofus.noteOn(1000);
+            doofus.setMotors(100,-100);
+            doofus.wait(650);
+            doofus.setMotors(0, 0);
+            doofus.noteOff();
+        }
+
+        //
+        //forward
+        //
+        static void forwardMove(Finch doofus)
+        {
+            doofus.setLED(0,250,0);
+            doofus.setMotors(100, 100);
+            doofus.wait(650);
+            doofus.setLED(0,0,0);
+        }
+
+        //
+        //backward
+        //
+        static void backwardMove(Finch doofus)
+        {
+            doofus.setLED(250,0,0);
+            doofus.setMotors(-100, -100);
+            doofus.wait(650);
+            doofus.setMotors(0, 0);
+
+        }
+        #endregion
+
+        #region TLightAndSound
         ///  
         /// *****************************************************************
         /// *               Talent Show > Light and Sound                   *
@@ -342,18 +395,50 @@ namespace Project_FinchControl
 
             DisplayScreenHeader("Light and Sound");
 
-            Console.WriteLine("\tThe Finch robot will not show off its glowing talent!");
+            Console.WriteLine("\tThe Finch robot will now show its buzzer by playing a scale!!");
             continueScreen();
-
-            for (int lightSoundLevel = 0; lightSoundLevel < 255; lightSoundLevel++)
+            for (int i = 0; i < 2; i++)
             {
-                doofus.setLED(lightSoundLevel, lightSoundLevel, lightSoundLevel);
-                doofus.noteOn(lightSoundLevel * 100);
+                doofus.noteOn(523);
+                doofus.wait(250);
+                doofus.noteOn(587);
+                doofus.wait(250);
+                doofus.noteOn(659);
+                doofus.wait(250);
+                doofus.noteOn(698);
+                doofus.wait(250);
+                doofus.noteOn(784);
+                doofus.wait(250);
+                doofus.noteOn(880);
+                doofus.wait(250);
+                doofus.noteOn(988);
+                doofus.wait(250);
+                doofus.noteOn(1047);
+                doofus.wait(500);
+                doofus.noteOn(988);
+                doofus.wait(250);
+                doofus.noteOn(880);
+                doofus.wait(250);
+                doofus.noteOn(784);
+                doofus.wait(250);
+                doofus.noteOn(698);
+                doofus.wait(250);
+                doofus.noteOn(659);
+                doofus.wait(250);
+                doofus.noteOn(587);
+                doofus.wait(250);
+                doofus.noteOn(523);
+                doofus.wait(250);
+                doofus.noteOff();
+
+
             }
+            
             
 
             DisplayMenuPrompt("Talent Show Menu");
         }
+        #endregion
 
         #endregion
 
