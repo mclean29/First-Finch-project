@@ -1,0 +1,11 @@
+﻿'Project_FinchControl.exe' (CLR v4.0.30319: DefaultDomain): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_32\mscorlib\v4.0_4.0.0.0__b77a5c561934e089\mscorlib.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Project_FinchControl.exe' (CLR v4.0.30319: DefaultDomain): Loaded 'C:\Users\mclea\OneDrive\Desktop\Project_FinchControl.MenuStarter-master\Project_FinchControl.MenuStarter-master\Project_FinchControl\bin\Debug\Project_FinchControl.exe'. Symbols loaded.
+'Project_FinchControl.exe' (CLR v4.0.30319: Project_FinchControl.exe): Loaded 'C:\Users\mclea\OneDrive\Desktop\Project_FinchControl.MenuStarter-master\Project_FinchControl.MenuStarter-master\Project_FinchControl\bin\Debug\FinchAPI.dll'. 
+'Project_FinchControl.exe' (CLR v4.0.30319: Project_FinchControl.exe): Loaded 'C:\Users\mclea\OneDrive\Desktop\Project_FinchControl.MenuStarter-master\Project_FinchControl.MenuStarter-master\Project_FinchControl\bin\Debug\HidSharp.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Project_FinchControl.exe' (CLR v4.0.30319: Project_FinchControl.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+'Project_FinchControl.exe' (CLR v4.0.30319: Project_FinchControl.exe): Loaded 'C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System\v4.0_4.0.0.0__b77a5c561934e089\System.dll'. Skipped loading symbols. Module is optimized and the debugger option 'Just My Code' is enabled.
+The thread 0x57cc has exited with code 0 (0x0).
+The thread 0x315c has exited with code 0 (0x0).
+The thread 0x68a4 has exited with code 0 (0x0).
+The thread 0x3f18 has exited with code 0 (0x0).
+The program '[23528] Project_FinchControl.exe' has exited with code -1073741510 (0xc000013a).

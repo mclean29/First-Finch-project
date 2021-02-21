@@ -19,11 +19,13 @@ namespace Project_FinchControl
 
     class Program
     {
+        
         ///  
         /// first method run when the app starts up
         ///  
         static void Main(string[] args)
         {
+            
             SetTheme();
 
             DisplayWelcomeScreen();
@@ -140,7 +142,7 @@ namespace Project_FinchControl
                 Console.WriteLine("\ta) Light and Sound");
                 Console.WriteLine("\tb) Movement Talent basic");
                 Console.WriteLine("\tc) Play a song");
-                Console.WriteLine("\td) user inputs movement");
+                Console.WriteLine("\td) Color calculator");
                 Console.WriteLine("\tq) Main Menu");
                 Console.Write("\t\tEnter Choice:");
                 menuChoice = Console.ReadLine().ToLower();
@@ -163,7 +165,7 @@ namespace Project_FinchControl
                         break;
 
                     case "d":
-
+                        colorCalc(doofus);
                         break;
 
                     case "q":
@@ -179,6 +181,288 @@ namespace Project_FinchControl
 
             } while (!quitTalentShowMenu);
         }
+
+        static int colorCalc(Finch doofus)
+        {
+            
+            
+            bool validResponse;
+            string user1;
+            string user2;
+            string user3;
+            int RedVal;
+            int GreenVal;
+            int BlueVal;
+            
+            
+            DisplayScreenHeader("Color Maker");
+            Console.WriteLine("\t You will now be able to control the finch's light!");
+            continueScreen();
+            Console.WriteLine();
+            Console.WriteLine("\t Now please enter 3 valid values for Red, Green, and Blue values");
+            Console.WriteLine();
+            Console.WriteLine("\t Valid values are from 0 to 255");
+            //user enters value 1
+            continueScreen();
+            Console.WriteLine();
+            Console.WriteLine("\t Please enter value 1 (Red), 0-255");
+            #region Red
+            do
+            {
+                validResponse = true;
+
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\t Value 1: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out RedVal) )
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else if ((RedVal >= 256))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: R value of: {RedVal}");
+                    
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+            #endregion
+            //
+            // Value 2 for green
+            //
+            #region Green
+            Console.WriteLine();
+            Console.WriteLine("\t Please enter value 2 (Green), 0-255");
+            do
+            {
+                validResponse = true;
+
+                //
+                //insert second number
+                //
+                Console.WriteLine();
+                Console.Write($"\t Value 2: ");
+                user2 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user2, out GreenVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else if ((GreenVal >= 256))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: G value of: {GreenVal}");
+                    Console.WriteLine();
+                   
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+            #endregion
+            //
+            // Value 3 for blue
+            //
+            #region Blue/table
+            Console.WriteLine();
+            Console.WriteLine("\t Please enter value 3 (Blue), 0-255");
+            do
+            {
+                validResponse = true;
+
+                //
+                //insert third number
+                //
+                Console.WriteLine();
+                Console.Write($"\t Value 3: ");
+                user3 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user3, out BlueVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else if ((BlueVal >= 256))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits from 0-255");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: B value of: {GreenVal}");
+                    Console.WriteLine();
+                    
+                    continueScreen();
+                }
+               
+
+
+                //
+                //display values entered
+                //
+
+                //
+                //Make the table
+                //
+                Console.WriteLine();
+                Console.WriteLine("\tYour Values Entered:");
+                Console.WriteLine(
+                    "R".PadLeft(10) +
+                    "G".PadLeft(10) +
+                    "B".PadLeft(10)
+                    );
+                Console.WriteLine(
+                   "---".PadLeft(10) +
+                   "---".PadLeft(10) +
+                   "---".PadLeft(10)
+               ); ;
+                //Line of user values
+                Console.WriteLine(
+                    RedVal.ToString().PadLeft(10) +
+                    GreenVal.ToString().PadLeft(10) +
+                    BlueVal.ToString().PadLeft(10)
+                    ) ;
+
+            } while (!validResponse);
+            continueScreen();
+            #endregion
+
+            //
+            //Put it on the robot
+            //
+            Console.WriteLine();
+            Console.WriteLine("\t Now I will put the colors to the robot!");
+            continueScreen();
+            doofus.setLED(RedVal,GreenVal,BlueVal);
+            Console.WriteLine();
+            Console.WriteLine("\t\t Ta-da!");
+            continueScreen();
+            calculateColor(RedVal, GreenVal, BlueVal);
+
+            return RedVal + GreenVal + BlueVal;
+            
+           
+        }
+
+
+        static string calculateColor(int RedVal, int GreenVal, int BlueVal)
+        {
+            string color;
+            //
+            //Red value
+            //
+            if ((RedVal > GreenVal) || (RedVal > BlueVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t From the colors you entered the color is mostly Red");
+                continueScreen();
+            }
+            
+            //
+            //Green value 
+            //
+            else if ((GreenVal > RedVal) || (GreenVal > BlueVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t From the colors you entered the color is mostly Green");
+                continueScreen();
+            }
+
+            //
+            //Blue Value
+            //
+            else if ((BlueVal > GreenVal)&&(BlueVal > RedVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t From the colors you entered the color is mostly Blue");
+                continueScreen();
+            }
+
+
+            //****************
+            //Combo Colors
+            //****************
+
+            //
+            //Red and blue
+            //
+            if ((RedVal > GreenVal) && (BlueVal > GreenVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t Your color should be close to a Purple hue or color");
+                continueScreen();
+            }
+            //
+            //Red and Green
+            //
+            if ((RedVal > BlueVal) && (GreenVal > BlueVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t Your Color should be close to a Yellow hue or color");
+                continueScreen();
+            }
+            //
+            //Green and Blue
+            //
+            if ((GreenVal > RedVal)&&(BlueVal > RedVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t Your Color should be close to a Cyan hue or color");
+                continueScreen();
+            }
+            //
+            //Red and blue
+            //
+            if ((RedVal > GreenVal) && (BlueVal > GreenVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t Your Color should be close to a Purple hue or color");
+                continueScreen();
+            }
+            //
+            //Color is just white
+            //
+            if (!((RedVal != GreenVal) || GreenVal != BlueVal))
+            {
+                Console.WriteLine();
+                Console.WriteLine("\t Your Color should be a White color");
+                continueScreen();
+            }
+
+            color = "blank";
+            return color;
+
+
+
+
+
+
+        }
+
+
 
         #region SONG
         //
