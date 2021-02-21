@@ -434,15 +434,6 @@ namespace Project_FinchControl
                 continueScreen();
             }
             //
-            //Red and blue
-            //
-            if ((RedVal > GreenVal) && (BlueVal > GreenVal))
-            {
-                Console.WriteLine();
-                Console.WriteLine("\t Your Color should be close to a Purple hue or color");
-                continueScreen();
-            }
-            //
             //Color is just white
             //
             if (!((RedVal != GreenVal) || GreenVal != BlueVal))
