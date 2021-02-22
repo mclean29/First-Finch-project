@@ -6,7 +6,7 @@ using FinchAPI;
 namespace Project_FinchControl
 {
 
-    // **************************************************
+    // ***************************************************
     //
     // Title: First Finch Program
     // Description: 
