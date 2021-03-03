@@ -1147,7 +1147,7 @@ namespace Project_FinchControl
                         break;
 
                     case "e":
-                        AlarmSysDiplaySetAlarm(doofus, sensorsToMonitor, rangeType, minMaxThresholdVal);
+                        AlarmSysDiplaySetAlarm(doofus, sensorsToMonitor, rangeType, minMaxThresholdVal, timeToMonitor);
                         break;
 
                     case "q":
@@ -1161,14 +1161,22 @@ namespace Project_FinchControl
                         break;
                 }
 
+              
             } while (!quitMenu);
         }
 
         //
-        //Set The alarm
+        //Set The alarm FOR LIGHT
         //
-        static void AlarmSysDiplaySetAlarm(Finch doofus, string sensorsToMonitor, string rangeType, int minMaxThresholdVal)
+        static void AlarmSysDiplaySetAlarm(Finch doofus, string sensorsToMonitor, string rangeType, int minMaxThresholdVal, int timeToMonitor)
         {
+            
+            bool thresholdExceeded = false;
+            int secondsElapsed = 1;
+            int leftLightSensVal;
+            int rightLightSensVal;
+
+
             DisplayScreenHeader("Set Alarm");
             //
             //echo values
@@ -1180,24 +1188,122 @@ namespace Project_FinchControl
             //
             continueScreen();
 
-            switch (sensorsToMonitor)
+
+
+
+            do
             {
-                case "left":
-                   
-                    break;
+                //
+                //get  current light levels
+                //
+                leftLightSensVal = doofus.getLeftLightSensor();
+                rightLightSensVal = doofus.getRightLightSensor();
 
-                case "right":
-                   
-                    break;
 
-                case "both":
-                   
-                    break;
+                //
+                //display current light levels
+                //
+                switch (sensorsToMonitor)
+                {
+                    case "left":
+                        Console.WriteLine($"\tCurrent left light sensor: {leftLightSensVal}");
+                        break;
 
-                default:
-                    Console.WriteLine("\tERROR: Unknown Sensor Reference");
-                    break;
+                    case "right":
+                        Console.WriteLine($"\tCurrent right light sensor: {rightLightSensVal}");
+                        break;
+
+                    case "both":
+                        Console.WriteLine($"\tCurrent left light sensor: {leftLightSensVal}");
+                        Console.WriteLine($"\tCurrent right light sensor: {rightLightSensVal}");
+                        break;
+
+                    default:
+                        Console.WriteLine("\tERROR: Unknown Sensor Reference");
+                        break;
+                }
+
+                //
+                //wait 1 second and increment
+                //
+                doofus.wait(1000);
+                secondsElapsed++;
+
+                //
+                //test for threshold exceeded
+                //
+                switch (sensorsToMonitor)
+                {
+                    case "left":
+                        if (rangeType == "minimum")
+                        {
+                            thresholdExceeded = (leftLightSensVal < minMaxThresholdVal);
+                        }
+                        else//max
+                        {
+                            thresholdExceeded = (leftLightSensVal > minMaxThresholdVal);
+                        }
+                        break;
+
+                    case "right":
+                        if (rangeType == "minimum")
+                        {
+                            if (rightLightSensVal < minMaxThresholdVal)
+                            {
+                                thresholdExceeded = true;
+                            }
+                        }
+                        else//max
+                        {
+                            if (rightLightSensVal > minMaxThresholdVal)
+                            {
+                                thresholdExceeded = true;
+                            }
+                        }
+                        break;
+
+                    case "both":
+                        if (rangeType == "minimum")
+                        {
+                            if ((leftLightSensVal < minMaxThresholdVal) || (rightLightSensVal < minMaxThresholdVal))
+                            {
+                                thresholdExceeded = true;
+                            }
+
+                        }
+                        else//max
+                        {
+                            if ((leftLightSensVal < minMaxThresholdVal) || (rightLightSensVal < minMaxThresholdVal))
+                            {
+                                thresholdExceeded = true;
+                            }
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Unknown Refernce");
+                        break;
+                }
+
+
+            } while (!thresholdExceeded && (secondsElapsed < timeToMonitor));
+
+            //
+            //display result
+            //
+            if (thresholdExceeded)
+            {
+                Console.WriteLine("Threshold exceeded");
             }
+            else
+            {
+                Console.WriteLine("threhold not exceeded---Time limit met");
+
+            }
+
+            
+
+
 
 
 
@@ -1209,14 +1315,45 @@ namespace Project_FinchControl
         //
         static int AlarmSysDisplayTimeToMonitor()
         {
+
+            string user1;
+            string user2;
+            bool validResponse;
             int timeToMonitor = 0;
+
+
             DisplayScreenHeader("Time To Monitor");
             //
             //TO DO USE LOOP TO VALIDATE
             //
-            Console.Write("\tEnter Time To Monitor:");
-            timeToMonitor = int.Parse(Console.ReadLine());
+            do
+            {
+                validResponse = true;
 
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\tTime to monitor in seconds: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out timeToMonitor))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {timeToMonitor} seconds");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+           
+           
 
             DisplayMenuPrompt("Alarm System");
             return timeToMonitor;
@@ -1261,12 +1398,41 @@ namespace Project_FinchControl
             //
             //Get Threshold from user
             //
-            //
-            // TO DO USE A LOOP TO VALIDATE
-            //
-            Console.Write("\tEnter Threshold Value: ");
-            thresholdVal = int.Parse(Console.ReadLine());
+           
+            bool validResponse = true;
+            string user1;
 
+            //
+            //validate threshold
+            //
+            do
+            {
+                validResponse = true;
+                
+                
+
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\tThreshold Value: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out thresholdVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {thresholdVal} seconds");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
 
             DisplayMenuPrompt("Alarm System");
 
@@ -1279,15 +1445,49 @@ namespace Project_FinchControl
         static string AlarmSysDisplayRangeType()
         {
             string rangeType = "";
-
+            bool validResponse;
             DisplayScreenHeader("range type");
 
-            Console.Write("\tEnter Range Type [Minimum, Maximum]:");
-            rangeType = Console.ReadLine();
+          
             //
             // TO DO VALIDATE
             //
+            do
+            {
+                validResponse = true;
+                rangeType = "";
+                //
+                //insert rangetype
+                //
+                Console.WriteLine();
+                Console.Write("\tEnter Range Type [minimum, maximum]:");
+                rangeType = Console.ReadLine();
+                Console.WriteLine();
 
+                if (rangeType =="minimum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (minimum)");
+                    validResponse = true;
+                }
+                else if (rangeType == "maximum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (maximum)");
+                    validResponse = true;
+                    
+                }
+                else
+                {
+                    validResponse = false;
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter either minimum or maximum ( CASE SENSITIVE )");
+                    
+                    continueScreen();
+                }
+               
+
+            } while (!validResponse);
 
             DisplayMenuPrompt("Alarm System");
             return rangeType;
