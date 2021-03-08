@@ -1123,7 +1123,9 @@ namespace Project_FinchControl
                 Console.WriteLine("\tg) Temperature Threshold");
                 Console.WriteLine("\th) Temperature Range Type");
                 Console.WriteLine("\ti) Temperature alarm");
-                Console.WriteLine("\th) set alarm for both temp and light");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("\tj) set alarm for both temp and light");
                 Console.WriteLine("\tq) quit");
                 Console.Write("\t\tEnter Choice:");
                 menuChoice = Console.ReadLine().ToLower();
@@ -1171,11 +1173,11 @@ namespace Project_FinchControl
                         break;
 
                     case "i":
-                        AlarmSysTempSetAlarm(doofus, rangeType, timeToMonitor, tempMinMaxThresholdVal);
+                        AlarmSysTempSetAlarm(doofus, rangeType);
                         break;
 
-                    case "z":
-                        AlarmSysTempAndLightSet(doofus, sensorsToMonitor, rangeType, minMaxThresholdVal, timeToMonitor);
+                    case "j":
+                        AlarmSysTempAndLightSetTL(doofus, sensorsToMonitor, rangeType, minMaxThresholdVal, timeToMonitor);
                         break;
 
                     case "q":
@@ -1339,7 +1341,7 @@ namespace Project_FinchControl
                 else
                 {
                     Console.WriteLine($"\tYou entered: {timeToMonitorTemp} seconds");
-
+                    
                     continueScreen();
                 }
 
@@ -1353,10 +1355,497 @@ namespace Project_FinchControl
             
         }
 
+
+        //
+        //
+        //
+        //ALARM FOR LIGHT AND TEMPS
+        //
+        //
+        //
+        static void AlarmSysTempAndLightSetTL(Finch doofus, string sensorsToMonitor, string rangeType, int minMaxThresholdVal, int timeToMonitor )
+        {
+            DisplayScreenHeader("alarm for light and temp at the same time");
+            continueScreen();
+            //
+            //ask for same things as the light sensor
+            //
+            //ask for set sensors
+            //
+            #region light set sensors
+            sensorsToMonitor = "";
+
+            DisplayScreenHeader("sensors to monitor");
+
+            Console.Write("\tEnter Sensors to Monitor: [left, right, both]");
+
+            //
+            // TO DO VALIDATE THIS
+            //
+            sensorsToMonitor = Console.ReadLine();
+            continueScreen();
+            #endregion
+
+            //
+            //Light range type
+            //
+            #region range type light
+            rangeType = "";
+            bool validResponse;
+            DisplayScreenHeader("range type");
+
+
+
+            do
+            {
+                validResponse = true;
+                rangeType = "";
+                //
+                //insert rangetype
+                //
+                Console.WriteLine();
+                Console.Write("\tEnter Range Type [minimum, maximum]:");
+                rangeType = Console.ReadLine();
+                Console.WriteLine();
+
+                if (rangeType == "minimum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (minimum)");
+                    validResponse = true;
+                }
+                else if (rangeType == "maximum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (maximum)");
+                    validResponse = true;
+
+                }
+                else
+                {
+                    validResponse = false;
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter either minimum or maximum ( CASE SENSITIVE )");
+
+                    continueScreen();
+                }
+
+
+            } while (!validResponse);
+
+            continueScreen();
+            #endregion
+
+            //
+            //get threshold value for Light
+            //
+            #region threshold value for light
+            int thresholdVal = 0;
+
+            int currentLeftSensVal = doofus.getLeftLightSensor();
+
+            int currentRightSensVal = doofus.getRightLightSensor();
+
+            DisplayScreenHeader("Threshold Value");
+
+            //
+            //display ambient values
+            //
+            switch (sensorsToMonitor)
+            {
+                case "left":
+                    Console.WriteLine($"Current {sensorsToMonitor} sensor value: {currentLeftSensVal}");
+                    break;
+
+                case "right":
+                    Console.WriteLine($"Current {sensorsToMonitor} sensor value: {currentRightSensVal}");
+                    break;
+
+                case "both":
+                    Console.WriteLine($"Current {sensorsToMonitor} sensor value: {currentLeftSensVal}");
+                    Console.WriteLine($"Current {sensorsToMonitor} sensor value: {currentRightSensVal}");
+                    break;
+
+                default:
+                    Console.WriteLine("\tERROR: Unknown Sensor Reference");
+                    break;
+            }
+
+            //
+            //Get Threshold from user
+            //
+
+            validResponse = true;
+            string user1;
+
+            //
+            //validate threshold
+            //
+            do
+            {
+                validResponse = true;
+
+
+
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\tThreshold Value: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out thresholdVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {thresholdVal}");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+
+
+            continueScreen();
+
+            #endregion
+
+            //
+            //get time to monitor
+            //
+            #region time to monitor light
+            
+            validResponse = true;
+            timeToMonitor = 0;
+
+
+            DisplayScreenHeader("Time To Monitor");
+            //
+            //TO DO USE LOOP TO VALIDATE
+            //
+            do
+            {
+                validResponse = true;
+
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\tTime to monitor in seconds: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out timeToMonitor))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {timeToMonitor} seconds");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+            continueScreen();
+            #endregion
+
+
+            Console.WriteLine("\tNow enter the data for the temperature");
+            continueScreen();
+            //
+            //Temperature data 
+            //
+
+            //
+            //get temp range type
+            //
+            #region temp range
+            string rangeTypeT = "";
+            validResponse = true;
+            DisplayScreenHeader("Temperature range type");
+
+
+
+            do
+            {
+                validResponse = true;
+                rangeTypeT = "";
+                //
+                //insert rangetype
+                //
+                Console.WriteLine();
+                Console.Write("\tEnter Range Type [minimum, maximum]:");
+                rangeTypeT = Console.ReadLine();
+                Console.WriteLine();
+
+                if (rangeTypeT == "minimum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (minimum)");
+                    validResponse = true;
+                }
+                else if (rangeTypeT == "maximum")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tYou have entered (maximum)");
+                    validResponse = true;
+
+                }
+                else
+                {
+                    validResponse = false;
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter either minimum or maximum ( CASE SENSITIVE )");
+
+                    continueScreen();
+                }
+
+
+            } while (!validResponse);
+
+            #endregion
+
+
+            //
+            //temp threhold
+            //
+            #region temp thresh
+            double tempMinMaxThresholdVal = 0;
+            double tempSensVal;
+            string tempThreshPlace = "";
+
+            DisplayScreenHeader("Threshold Value");
+
+            //
+            //display ambient values
+            //
+            tempSensVal = doofus.getTemperature();
+            Console.WriteLine($"\t Current ambient Temp: {tempSensVal:n1}");
+
+
+
+
+            validResponse = true;
+
+
+            //
+            //validate threshold
+            //
+            do
+            {
+                //
+                //get threshold from user and echo
+                //
+                Console.WriteLine();
+                Console.Write("\t Please enter the threshold number you want the alarm to be triggered at:");
+                tempThreshPlace = Console.ReadLine();
+                validResponse = true;
+
+                if (!double.TryParse(tempThreshPlace, out tempMinMaxThresholdVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {tempMinMaxThresholdVal}");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+            #endregion
+
+            //
+            //TEST FOR EVERYTHING
+            //
+            #region light and temp test
+            int secondsElapsed = 1;
+            bool thresholdExceededL = false;
+            bool tempThresholdExceeded = false;
+            do
+            {
+                //
+                //get  current light levels
+                //
+                double leftLightSensVal = doofus.getLeftLightSensor();
+                double rightLightSensVal = doofus.getRightLightSensor();
+
+
+                //
+                //display current light levels
+                //
+                switch (sensorsToMonitor)
+                {
+                    case "left":
+                        Console.WriteLine($"\tCurrent left light sensor: {leftLightSensVal}");
+                        break;
+
+                    case "right":
+                        Console.WriteLine($"\tCurrent right light sensor: {rightLightSensVal}");
+                        break;
+
+                    case "both":
+                        Console.WriteLine($"\tCurrent left light sensor: {leftLightSensVal}");
+                        Console.WriteLine($"\tCurrent right light sensor: {rightLightSensVal}");
+                        break;
+
+                    default:
+                        Console.WriteLine("\tERROR: Unknown Sensor Reference");
+                        break;
+                }
+
+                //
+                //wait 1 second and increment
+                //
+                doofus.wait(1000);
+                secondsElapsed++;
+
+                //
+                //test for threshold exceeded
+                //
+                tempSensVal = doofus.getTemperature();
+                Console.WriteLine($"\tCurrent temp value: {tempSensVal:n1}");
+
+                //
+                //test to see if it went over limit
+                //
+                if (rangeTypeT == "minimum")
+                {
+                    if (tempSensVal < tempMinMaxThresholdVal)
+                    {
+                        tempThresholdExceeded = true;
+                    }
+                }
+                else//max
+                {
+                    if (tempSensVal > tempMinMaxThresholdVal)
+                    {
+                        tempThresholdExceeded = true;
+                    }
+                }
+                switch (sensorsToMonitor)
+                {
+                    case "left":
+                        if (rangeType == "minimum")
+                        {
+                            if (leftLightSensVal < minMaxThresholdVal)
+                            {
+                                thresholdExceededL = true;
+                            }
+                        }
+                        else//max
+                        {
+                            if (leftLightSensVal > minMaxThresholdVal)
+                            {
+                                thresholdExceededL = true;
+                            }
+                        }
+                        break;
+
+                    case "right":
+                        if (rangeType == "minimum")
+                        {
+                            if (rightLightSensVal < minMaxThresholdVal)
+                            {
+                                thresholdExceededL = true;
+                            }
+                        }
+                        else//max
+                        {
+                            if (rightLightSensVal > minMaxThresholdVal)
+                            {
+                                thresholdExceededL = true;
+                            }
+                        }
+                        break;
+
+                    case "both":
+                        if (rangeType == "minimum")
+                        {
+                            if ((leftLightSensVal < minMaxThresholdVal) || (rightLightSensVal < minMaxThresholdVal))
+                            {
+                                thresholdExceededL = true;
+                            }
+
+                        }
+                        else//max
+                        {
+                            if ((leftLightSensVal < minMaxThresholdVal) || (rightLightSensVal < minMaxThresholdVal))
+                            {
+                                thresholdExceededL = true;
+                            }
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("Unknown Refernce");
+                        break;
+
+                       
+                }
+
+
+            } while (!thresholdExceededL && (secondsElapsed < timeToMonitor) && !tempThresholdExceeded);
+            #endregion
+
+            //
+            //display result
+            //
+            if (thresholdExceededL)
+            {
+                Console.WriteLine("\tLight Threshold exceeded");
+            }
+            else if(tempThresholdExceeded)
+            {
+                Console.WriteLine("\tTemperature Threshold exceeded");
+            }
+            else
+            {
+                Console.WriteLine("\tthreshold not exceeded---Time limit met");
+
+            }
+
+            continueScreen();
+        }
+
+        //
+        //Sensors to monitor
+        //
+        static string alarmSysDisplaySetSensorsTL()
+        {
+            string sensorsToMonitorTL = "";
+
+            DisplayScreenHeader("sensors to monitor");
+
+            Console.Write("\tEnter Sensors to Monitor: [left, right, both]");
+
+            //
+            // TO DO VALIDATE THIS
+            //
+            sensorsToMonitorTL = Console.ReadLine();
+
+            Console.WriteLine($"You entered: {sensorsToMonitorTL}");
+
+            return sensorsToMonitorTL;
+        }
+
+
+
+
         //
         //alarm for temps
         //
-        static void AlarmSysTempSetAlarm(Finch doofus, string rangeTypeT, int timeToMonitorTemp, double tempMinMaxThresholdVal)
+        static void AlarmSysTempSetAlarm(Finch doofus, string rangeTypeT)
         {
             Console.Clear();
             int secondsElapsed = 1;
@@ -1371,17 +1860,96 @@ namespace Project_FinchControl
             Console.WriteLine($"\t Current ambient Temp: {tempSensVal:n1}");
 
             //
+            //GET TIME TO TEST FOR
+            //
+            #region TIMETEST
+            int timeToMonitorTemp = 0;
+            string user1;
+            string user2;
+            bool validResponse;
+
+            DisplayScreenHeader("Time To Monitor");
+            //
+            //TO DO USE LOOP TO VALIDATE
+            //
+            do
+            {
+                validResponse = true;
+
+                //
+                //insert first number
+                //
+                Console.WriteLine();
+                Console.Write($"\tTime to monitor in seconds: ");
+                user1 = Console.ReadLine();
+                Console.WriteLine();
+
+                if (!int.TryParse(user1, out timeToMonitorTemp))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {timeToMonitorTemp} seconds");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+
+            #endregion
+
+
+
+            //
             //get threshold from user and echo
             //
-            Console.WriteLine();
-            Console.Write("\t Please enter the threshold number you want the alarm to be triggered at:");
-            tempThreshPlace = Console.ReadLine();
-            tempMinMaxThresholdVal = double.Parse(tempThreshPlace);
-            Console.WriteLine();
-            Console.WriteLine($"\tYou entered: {tempMinMaxThresholdVal} for the threshold for Temperatures");
-            Console.WriteLine();
+            #region threholdTemp
+            double tempMinMaxThresholdVal = 0;
             
            
+
+            DisplayScreenHeader("Threshold Value");
+
+            //
+            //display ambient values
+            //
+            tempSensVal = doofus.getTemperature();
+            Console.WriteLine($"\t Current ambient Temp: {tempSensVal:n1}");
+
+            validResponse = true;
+
+            //
+            //validate threshold
+            //
+            do
+            {
+                //
+                //get threshold from user and echo
+                //
+                Console.WriteLine();
+                Console.Write("\t Please enter the threshold number you want the alarm to be triggered at:");
+                tempThreshPlace = Console.ReadLine();
+                validResponse = true;
+
+                if (!double.TryParse(tempThreshPlace, out tempMinMaxThresholdVal))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"\tPlease enter a number using digits, ex: 1, 3, 25, etc...");
+                    validResponse = false;
+                }
+                else
+                {
+                    Console.WriteLine($"\tYou entered: {tempMinMaxThresholdVal}");
+
+                    continueScreen();
+                }
+
+            } while (!validResponse);
+            
+            #endregion
             //
             //start test
             //
@@ -1404,17 +1972,23 @@ namespace Project_FinchControl
                 //
                 if (rangeTypeT == "minimum")
                 {
-                    tempThresholdExceeded = (tempSensVal < tempMinMaxThresholdVal);
+                    if (tempSensVal < tempMinMaxThresholdVal)
+                    {
+                        tempThresholdExceeded = true;
+                    }
                 }
                 else//max
                 {
-                    tempThresholdExceeded = (tempSensVal > tempMinMaxThresholdVal);
+                    if (tempSensVal > tempMinMaxThresholdVal)
+                    {
+                        tempThresholdExceeded = true;
+                    }
                 }
-                break;
-                
+
             } while (!tempThresholdExceeded && (secondsElapsed < timeToMonitorTemp));
 
-            Console.WriteLine($"\tCurrent temp value: {tempSensVal}");
+           
+            Console.WriteLine($"\tCurrent temp value: {tempSensVal:n1}");
             //
             //display result
             //
@@ -1430,31 +2004,7 @@ namespace Project_FinchControl
             Console.ReadKey();
         }
 
-        //
-        //
-        //
-        //ALARM FOR LIGHT AND TEMPS
-        //
-        //
-        //
-        static void AlarmSysTempAndLightSet(Finch doofus, string sensorsToMonitor, string rangeType, int minMaxThresholdVal, int timeToMonitor)
-        {
-            int tempMinMaxThresholdVal = 0;
-            
-            bool tempThresholdExceeded = false;
-            bool lightThresholdExceeded = false;
-
-            DisplayScreenHeader("Alarm for Temps and Light");
-            Console.WriteLine("\t Enter Threshold for Temperature to check for");
-
-            do
-            {
-               
-
-            } while (!tempThresholdExceeded || !lightThresholdExceeded);
-            
-        }
-
+       
        
         //
         //
@@ -1795,7 +2345,7 @@ namespace Project_FinchControl
 
             DisplayScreenHeader("sensors to monitor");
 
-            Console.Write("\tEnter Sensors to Monitor: [Left, Right, Both]");
+            Console.Write("\tEnter Sensors to Monitor: [left, right, both]");
 
             //
             // TO DO VALIDATE THIS
