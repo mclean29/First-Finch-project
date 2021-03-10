@@ -17,6 +17,27 @@ namespace Project_FinchControl
     //
     // **************************************************
 
+    //
+    //Enum for user programming
+    //
+    public enum Command
+    { 
+           none,
+           moveforward,
+           movebackward,
+           stopmotors,
+           wait,
+           turnright,
+           turnleft,
+           ledon,
+           ledoff,
+           gettemperature,
+           done
+    
+    }
+
+
+
     class Program
     {
         
@@ -96,7 +117,7 @@ namespace Project_FinchControl
                         break;
 
                     case "e":
-
+                        userProgrammingMenuScreen(doofus);
                         break;
 
                     case "f":
@@ -1177,7 +1198,7 @@ namespace Project_FinchControl
                         break;
 
                     case "j":
-                        AlarmSysTempAndLightSetTL(doofus, sensorsToMonitor, rangeType, minMaxThresholdVal, timeToMonitor);
+                        AlarmSysTempAndLightSetTL(doofus, sensorsToMonitor, rangeType,  minMaxThresholdVal, timeToMonitor);
                         break;
 
                     case "q":
@@ -1608,7 +1629,7 @@ namespace Project_FinchControl
                     continueScreen();
                 }
 
-
+                
             } while (!validResponse);
 
             #endregion
@@ -2446,6 +2467,174 @@ namespace Project_FinchControl
         }
 
         #endregion
+        #endregion
+
+
+        #region USER PROGRAMMING
+
+        //
+        //
+        //
+
+
+
+        //
+        //user programming menu
+        //
+        static void userProgrammingMenuScreen(Finch doofus)
+        {
+            Console.CursorVisible = true;
+
+            bool quitMenu = false;
+            string menuChoice;
+
+            (int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+            List<Command> commands = null;
+           
+
+
+            do
+            {
+                DisplayScreenHeader("Data Recorder Menu");
+
+                //
+                // get user menu choice
+                //
+                Console.WriteLine("\ta) Get Command Parameters");
+                Console.WriteLine("\tb) Get Commands");
+                Console.WriteLine("\tc) View Commands");
+                Console.WriteLine("\td) Execute Commands");
+                Console.WriteLine();
+                Console.WriteLine("\tq) quit");
+                Console.Write("\t\tEnter Choice:");
+                menuChoice = Console.ReadLine().ToLower();
+
+                //
+                // process user menu choice
+                //
+                switch (menuChoice)
+                {
+                    case "a":
+                        commandParameters = UserProgrammingDisplayGetCommandParam();
+                        break;
+
+                    case "b":
+                        commands = UserProgrammingDisplayGetFinchCommands();
+                        break;
+
+                    case "c":
+                        UserProgrammingDisplayViewCommands(commands);
+                        break;
+
+                    case "q":
+                        quitMenu = true;
+                        break;
+
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine("\tPlease enter a letter for the menu choice.");
+                        continueScreen();
+                        break;
+                }
+
+
+            } while (!quitMenu);
+        }
+
+        //
+        //View commands
+        //
+        static void UserProgrammingDisplayViewCommands(List<Command> commands)
+        {
+            DisplayScreenHeader("View Commands");
+
+            Console.WriteLine("\tCommand List");
+            Console.WriteLine("\t------------");
+            foreach (Command command in commands)
+            {
+                Console.WriteLine("\t"+command);
+            }
+
+
+            continueScreen();
+        }
+
+        //
+        //get commands from suer
+        //
+        static List<Command> UserProgrammingDisplayGetFinchCommands()
+        {
+            List<Command> commands = new List<Command>();
+            bool isDone = false;
+            string userResponse;
+            Command command;
+
+            DisplayScreenHeader("User Commands");
+
+            do
+            {
+                Console.Write("Command: ");
+                userResponse = Console.ReadLine();
+
+                if (userResponse != "done")
+                {
+                    if (Enum.TryParse(userResponse.ToLower(), out command))
+                    {
+                        commands.Add(command);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\tPlease enter one of the following:");
+                    }
+                }
+                else 
+                {
+                    isDone = true;
+                }
+
+            } while (!isDone);
+
+
+
+            continueScreen();
+            return commands;
+        }
+
+        //
+        //Get command parameters from user
+        //
+        static (int motorSpeed, int ledBrightness, double waitSeconds) UserProgrammingDisplayGetCommandParam()
+        {
+            (int motorSpeed, int ledBrightness, double waitSeconds) commandParameters;
+
+            DisplayScreenHeader("Command Parameters");
+
+            //
+            //
+            //TO DO VALIDATE
+            //
+            //
+            Console.Write("Motor Speed (from 1-255): ");
+            commandParameters.motorSpeed = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+            Console.Write("LED Brightness (from 1-255): ");
+            commandParameters.ledBrightness = int.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+            Console.Write("Wait Time (Seconds): ");
+            commandParameters.waitSeconds = double.Parse(Console.ReadLine());
+            Console.WriteLine();
+
+
+
+            continueScreen();
+            return commandParameters;
+        }
+
+
+
+
         #endregion
     }
 }
